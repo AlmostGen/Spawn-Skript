@@ -1,0 +1,39 @@
+command /spawn:
+  trigger:
+    teleport player to {spawn}
+ 
+command /setspawn:
+  permission: op
+  permission message: &7Hey, you can't use that!
+  trigger:
+    set {spawn} to location of player
+    send "&7You have succesfully placed spawn at &6%{spawn}%" to player
+ 
+command /delspawn:
+  permission: op
+  permission message: &7Hey, you can't use that!
+  trigger:
+    send "&7You have deleted spawn at &6%{spawn}%"
+    delete {spawn}
+ 
+on damage:
+  if attacker is player:
+    if victim is player:
+      set {combat::%attacker%} to true
+      set {combat::%victim%} to true
+      wait 5 seconds
+      if {combat::%attacker%} is true:
+        set {combat::%attacker%} to false
+      if {combat::%victim%} is true:
+        set {combat::%victim%} to false
+ 
+on command "/spawn":
+  if {combat::%player%} is true:
+    cancel event
+    send "&7Hey, you are in combat!" to player
+ 
+on join:
+  teleport player to {spawn}
+ 
+on death:
+  teleport player to {spawn}
